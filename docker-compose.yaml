@@ -1,0 +1,33 @@
+version: "2"
+services:
+
+  # minio:
+  #   image: minio/minio:RELEASE.2020-08-18T19-41-00Z
+  #   volumes:
+  #     - data:/data
+  #   ports:
+  #     - "9004:9000"
+  #   environment:
+  #     MINIO_ACCESS_KEY: admin
+  #     MINIO_SECRET_KEY: password
+  #   command: server http://minio{1...4}/data{1...2}
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+  #     interval: 30s
+  #     timeout: 20s
+  #     retries: 3
+
+  entrypoint:
+    build: ./entrypoint
+    command: npm start
+    ports:
+    - "3000:3000"
+
+  training:
+    build: ./training
+    command: python handler.py
+    restart: always
+
+
+volumes:
+  data:

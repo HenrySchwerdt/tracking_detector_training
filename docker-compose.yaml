@@ -1,21 +1,27 @@
 version: "2"
 services:
-
-  # minio:
-  #   image: minio/minio:RELEASE.2020-08-18T19-41-00Z
-  #   volumes:
-  #     - data:/data
-  #   ports:
-  #     - "9004:9000"
-  #   environment:
-  #     MINIO_ACCESS_KEY: admin
-  #     MINIO_SECRET_KEY: password
-  #   command: server http://minio{1...4}/data{1...2}
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-  #     interval: 30s
-  #     timeout: 20s
-  #     retries: 3
+  
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: trackingDetector
+      MINIO_ROOT_PASSWORD: Strong#Pass#2022
+    command: server --console-address ":9001" /data
+  
+  db:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_storage:/data/db
 
   entrypoint:
     build: ./entrypoint
@@ -30,4 +36,5 @@ services:
 
 
 volumes:
-  data:
+  minio_storage: {}
+  mongo_storage: {}

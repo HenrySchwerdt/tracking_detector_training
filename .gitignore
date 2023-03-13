@@ -1,2 +1,2 @@
-node_modules
-package-lock.json
+entrypoint/node_modules
+entrypoint/package-lock.json

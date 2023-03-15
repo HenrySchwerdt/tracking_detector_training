@@ -3,6 +3,7 @@ services:
   
   minio:
     image: minio/minio
+    container_name: minio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -15,23 +16,28 @@ services:
   
   db:
     image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-    ports:
-      - 27017:27017
+    container_name: db
+    # ports:
+    #   - "27017:27017"
     volumes:
       - mongo_storage:/data/db
 
-  entrypoint:
-    build: ./entrypoint
-    command: npm start
+  server:
+    build: ./server
+    container_name: server
+    depends_on:
+      - db
+      - minio
     ports:
     - "3000:3000"
 
   training:
     build: ./training
+    container_name: training
     command: python handler.py
+    depends_on:
+      - db
+      - minio
     restart: always
 
 

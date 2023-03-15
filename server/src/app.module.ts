@@ -5,11 +5,11 @@ import { RequestModule } from './requests/requests.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://root:rootpassword@db:27017/tracking', {
-      auth: {
-          username: "root",
-          password: "rootpassword"
-        }
+    MongooseModule.forRoot('mongodb://db:27017/tracking', {
+      // auth: {
+      //     username: "root",
+      //     password: "rootpassword"
+      //   }
     }),
     RequestModule,
     HbsModule

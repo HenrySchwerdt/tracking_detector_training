@@ -10,12 +10,14 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
 
-
-  app.engine('hbs', hbs.create({
+  const hbsObj = hbs.create({
     layoutsDir: join(__dirname, '..', 'views', 'layouts'),
     partialsDir: join(__dirname, '..', 'views', 'partials'),
-    extname: 'hbs'
-  }));
+    extname: 'hbs',
+    defaultLayout: 'main'
+  })
+
+  app.engine('hbs', hbsObj.engine);
   app.setViewEngine('hbs')
 
   await app.listen(3000);

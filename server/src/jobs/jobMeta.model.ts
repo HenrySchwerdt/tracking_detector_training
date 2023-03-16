@@ -1,16 +1,28 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { randomUUID } from "crypto";
-import { HydratedDocument } from "mongoose";
+import mongoose, { HydratedDocument } from "mongoose";
 
 
 export type JobMetaDocument = HydratedDocument<JobMeta>;
 
-@Schema()
+@Schema({
+    timestamps: true,
+    toJSON: {
+        virtuals: true,
+        transform(doc, ret) {
+            delete ret._id;
+            delete ret.__v;
+        },
+    },
+    toObject: {
+        virtuals: true,
+        transform(doc, ret) {
+            doc.id = ret._id;
+        },
+    },
+})
 export class JobMeta {
-    @Prop({ type: String, default: function genUUID() {
-        return randomUUID()
-    }})
-    _id: string;
+    id? : string;
 
     @Prop()
     jobName: string;

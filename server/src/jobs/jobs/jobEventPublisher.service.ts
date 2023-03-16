@@ -8,6 +8,7 @@ import { JobRun, JobRunDocument } from "../jobRun.model";
 export class JobEventPublisher {
 
     private log: string = ""
+    private currentRunId : string = null;
 
     private constructor(private readonly jobId: string,
          private readonly jobMetaModel: Model<JobMetaDocument>,
@@ -19,36 +20,38 @@ export class JobEventPublisher {
 
     async startJob() {
         const startTime = Date.now();
-        await this.jobMetaModel.updateOne({_id: this.jobId}, {
+        
+        await this.jobMetaModel.findByIdAndUpdate(this.jobId, {
             lastJobRun: startTime
         }).exec()
 
         const jobRun = new this.jobRunModel({
-            id: this.jobId,
+            jobId: this.jobId,
             status: "RUNNING",
             startTime: startTime,
             endTime: null,
             logs: this.log,
         })
-        await jobRun.save();
+        const currentRun = await jobRun.save();
+        this.currentRunId = currentRun.id;
     }
 
     async skipped() {
-        await this.jobRunModel.updateOne({_id: this.jobId}, {
+        await this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             status: "SKIPPED",
             endTime: Date.now()
         }).exec()
     }
 
     async success() {
-        await this.jobRunModel.updateOne({_id: this.jobId}, {
+        await this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             status: "SUCCESS",
             endTime: Date.now()
         }).exec()
     }
 
     async failure() {
-        await this.jobRunModel.updateOne({_id: this.jobId}, {
+        await this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             status: "FAILURE",
             endTime: Date.now()
         }).exec()
@@ -73,7 +76,7 @@ export class JobEventPublisher {
         + " : "
         + messages.join(" ")
         + "\n";
-        this.jobRunModel.updateOne({_id: this.jobId}, {
+        this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             logs: this.log
         }).exec()
     }

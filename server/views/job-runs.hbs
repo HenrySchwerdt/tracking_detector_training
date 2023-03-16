@@ -1,0 +1,16 @@
+<div class="card m-3">
+  <div class="card-body p-3">
+     <h3 class="card-title">Run Overview</h3>
+        {{#each jobRuns as | run |}}
+            <div class="card mt-3">
+                 <div class="card-body p-3">
+                    <h6 class="card-title">RunId: {{ run.id }}</h6> 
+                    startTime: {{#formatDate run.startTime}}{{/formatDate}} <br>
+                    endTime: {{#formatDate run.endTime}}{{/formatDate}} <br>
+                    status: {{run.status}} <br>
+                    <a href="/trackingDetectorService/job-runs/{{run.jobId}}/{{run.id}}/logs">See Logs</a> 
+                 </div>
+            </div>
+        {{/each}} 
+  </div>
+</div>

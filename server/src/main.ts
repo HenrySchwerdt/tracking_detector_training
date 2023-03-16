@@ -17,7 +17,15 @@ async function bootstrap() {
     partialsDir: join(__dirname, '..', 'views', 'partials'),
     extname: 'hbs',
     defaultLayout: 'main',
-    handlebars: allowInsecurePrototypeAccess(Hbs)
+    handlebars: allowInsecurePrototypeAccess(Hbs),
+    helpers: {
+      formatDate(date?: number) {
+        if (date == null) {
+          return "null";
+        }
+        return new Date(date).toISOString()
+      }
+    }
   })
 
   app.engine('hbs', hbsObj.engine);

@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from "@nestjs/common";
+import { Controller, Get, Param, Res } from "@nestjs/common";
 import { Response } from "express";
 import { JobService } from "src/jobs/job.service";
 
@@ -35,9 +35,27 @@ export class HbsController {
 
         const jobs = await this.jobService.findAllJobs();
         return res.render('job-overview', {
-            
+
             layout: 'main',
             jobs: jobs
+        })
+    }
+
+    @Get("job-runs/:id")
+    async jobRuns(@Param() params, @Res() res: Response) {
+        const jobRuns = await this.jobService.findAllRunsForJob(params.id);
+        return res.render('job-runs', {
+            layout: 'main',
+            jobRuns: jobRuns.sort((run1, run2) => run2.startTime - run1.startTime)
+        })
+    }
+
+    @Get("job-runs/:jobId/:runId/logs")
+    async jobLogs(@Param() params, @Res() res: Response) {
+        const jobRun = await this.jobService.findRunById(params.runId)
+        return res.render('job-logs', {
+            layout: 'main',
+            jobRun: jobRun
         })
     }
 }

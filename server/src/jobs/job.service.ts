@@ -22,6 +22,9 @@ export class JobService {
     async findAllJobs() : Promise<JobMeta[]> {
         return this.jobMetaModel.find().exec();
     }
+    async findRunById(id: string) : Promise<JobRun> {
+        return this.jobRunModel.findById(id);
+    }
     async toggleJobById(id: string) : Promise<boolean> {
         throw new Error("Method not implemented.");
     }

@@ -7,7 +7,8 @@
                     <h6 class="card-title">{{ job.jobName }}</h6>
                      <p class="card-text">{{ job.jobDescription }}</p>
                      cronPattern: {{ job.cronPattern }} <br>
-                     enabled: {{ job.enabled }}
+                     enabled: {{ job.enabled }} <br>
+                     <a href="/trackingDetectorService/job-runs/{{job.id}}">See Runs</a>
                  </div>
             </div>
         {{/each}} 

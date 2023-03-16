@@ -7,7 +7,7 @@ import { JobRun, JobRunDocument } from "../jobRun.model";
 
 export class JobEventPublisher {
 
-    private log: string = ""
+    private log: string = "\n"
     private currentRunId : string = null;
 
     private constructor(private readonly jobId: string,

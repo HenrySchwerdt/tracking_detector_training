@@ -1,16 +1,13 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { Mongoose } from "mongoose";
 import { JobController } from "./job.controller";
 import { JobRunnerService } from "./jobRunner.service";
 import { JobMeta, JobMetaSchema } from "./jobMeta.model";
 import { JobRun, JobRunSchema } from "./jobRun.model";
-import { JobEventPublisherService } from "./jobs/jobEventPublisher.service";
-import { ModelTrainingJob } from "./jobs/modelTraining.job";
+import { JobEventPublisherService } from "./jobDefinitions/jobEventPublisher.service";
+import { ModelTrainingJob } from "./jobDefinitions/modelTraining.job";
 import { JobService } from "./job.service";
-import { CleanUpJob } from "./jobs/cleanUpJob";
-
-
+import { CleanUpJob } from "./jobDefinitions/cleanUpJob";
 
 
 @Module({

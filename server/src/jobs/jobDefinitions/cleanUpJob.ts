@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
 import { CronExpression } from "@nestjs/schedule";
+import { Model } from "mongoose";
 import { JobService } from "../job.service";
+import { JobMeta, JobMetaDocument } from "../jobMeta.model";
 import { JobRun } from "../jobRun.model";
 import { Job } from "./job.interface";
 import { JobEventPublisher } from "./jobEventPublisher.service";
@@ -10,9 +13,11 @@ export const CLEAN_UP_JOB_CRON = CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIG
 const DELETION_THREASH_HOLD = 2629800000 // One Month in miliseconds
 
 @Injectable()
-export class CleanUpJob implements Job {
+export class CleanUpJob extends Job {
 
-    constructor(private readonly jobService: JobService) { }
+    constructor(private readonly jobService: JobService,  @InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>) {
+        super(jobMetaModel);
+    }
 
     async execute(jobEventPublisher: JobEventPublisher): Promise<boolean> {
         jobEventPublisher.info("Start loading all JobDefinitions.");

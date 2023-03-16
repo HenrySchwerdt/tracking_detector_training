@@ -2,11 +2,18 @@ import { Injectable } from "@nestjs/common";
 import { Job } from "./job.interface";
 import { JobEventPublisher } from "./jobEventPublisher.service";
 import { call } from "funker"
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { JobMeta, JobMetaDocument } from "../jobMeta.model";
 
 export const MODEL_TRAINING_JOB_CRON = "*/1 * * * *"
 
 @Injectable()
-export class ModelTrainingJob implements Job {
+export class ModelTrainingJob extends Job {
+
+    constructor(@InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>) {
+        super(jobMetaModel);
+    }
 
     async execute(jobEventPublisher : JobEventPublisher): Promise<boolean> {
         return new Promise(resolve => {

@@ -23,9 +23,9 @@ export abstract class Job implements JobInterface {
 
     onModuleInit(): void {
         console.log("Initialzing Job: " + this.getName())
-        let result = this.jobMetaModel.find().exec()
+        let result = this.jobMetaModel.findOne({jobName: this.getName()}).exec()
         result.then((value) => {
-            let jobModel = value.find(job => job.jobName == this.getName())
+            let jobModel = value
             let saved = new Promise<JobMeta>(resolve => resolve(jobModel));
             if (jobModel == null) {
                 const model = new this.jobMetaModel({

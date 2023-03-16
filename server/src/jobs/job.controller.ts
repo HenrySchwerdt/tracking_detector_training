@@ -8,14 +8,6 @@ export class JobController {
 
     constructor(private readonly jobService: JobService) {}
 
-    @Post(":id")
-    triggerJob(@Param() params) : Object {
-        const triggerResult = this.jobService.triggerJobById(params.id);
-        return {
-            triggerResult 
-        }
-
-    }
 
     @Post(":id/toggle")
     toggleJob(@Param() params) : Object {

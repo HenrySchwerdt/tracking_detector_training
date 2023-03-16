@@ -1,10 +1,12 @@
 import { Controller, Get, Res } from "@nestjs/common";
 import { Response } from "express";
+import { JobService } from "src/jobs/job.service";
+
 
 
 @Controller("trackingDetectorService")
 export class HbsController {
-
+    constructor(private readonly jobService: JobService) {}
     @Get()
     root(@Res() res: Response) {
         return res.render('index', {
@@ -29,10 +31,13 @@ export class HbsController {
     }
 
     @Get("job-overview")
-    jobOverview(@Res() res: Response) {
+    async jobOverview(@Res() res: Response) {
+
+        const jobs = await this.jobService.findAllJobs();
         return res.render('job-overview', {
+            
             layout: 'main',
-            message: 'HelloWorld'
+            jobs: jobs
         })
     }
 }

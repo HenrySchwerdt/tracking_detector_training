@@ -1,3 +1,5 @@
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access';
+import * as Hbs from 'handlebars'
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'express-handlebars';
@@ -14,7 +16,8 @@ async function bootstrap() {
     layoutsDir: join(__dirname, '..', 'views', 'layouts'),
     partialsDir: join(__dirname, '..', 'views', 'partials'),
     extname: 'hbs',
-    defaultLayout: 'main'
+    defaultLayout: 'main',
+    handlebars: allowInsecurePrototypeAccess(Hbs)
   })
 
   app.engine('hbs', hbsObj.engine);

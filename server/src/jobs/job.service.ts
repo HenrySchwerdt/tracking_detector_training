@@ -34,11 +34,13 @@ export class JobService {
         this.jobRunModel.deleteOne({_id: id});
     }
 
-    async toggleJobById(id: string) : Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
-    async triggerJobById(id: string) : Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async toggleJobById(name: string) : Promise<boolean> {
+        const job = await this.jobMetaModel.findOne({jobName: name});
+
+        await this.jobMetaModel.updateOne({_id: job.id}, {
+            enabled: !job.enabled
+        });
+        return true;
     }
 
 

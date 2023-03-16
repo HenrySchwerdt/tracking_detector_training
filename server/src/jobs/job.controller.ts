@@ -1,21 +1,13 @@
-import { Controller, Get, Param, Post } from "@nestjs/common";
+import { Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import { JobService } from "./job.service";
 import { JobMeta } from "./jobMeta.model";
 import { JobRun } from "./jobRun.model";
+import { JobRunnerService } from "./jobRunner.service";
 
 @Controller("jobs")
 export class JobController {
 
-    constructor(private readonly jobService: JobService) {}
-
-
-    @Post(":id/toggle")
-    toggleJob(@Param() params) : Object {
-        const enabled = this.jobService.toggleJobById(params.id);
-        return {
-            enabled
-        }
-    }
+    constructor(private readonly jobService: JobService, private readonly jobRunnerService : JobRunnerService) {}
 
     @Get()
     getAllJobs() : Promise<JobMeta[]>  {
@@ -30,6 +22,16 @@ export class JobController {
     @Get(":id")
     getJobById(@Param() params) : Promise<JobMeta> {
         return this.jobService.findJobById(params.id);
+    }
+
+    @Post("trigger/:jobName")
+    triggerJob(@Param() params) {
+        this.jobRunnerService.triggerJobByName(params.jobName);
+    }
+
+    @Patch("toggle/:jobName")
+    toggleJob(@Param() params) {
+        this.jobService.toggleJobById(params.jobName)
     }
 
 

@@ -5,8 +5,9 @@ import { call } from "funker"
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { JobMeta, JobMetaDocument } from "../jobMeta.model";
+import { CronExpression } from "@nestjs/schedule";
 
-export const MODEL_TRAINING_JOB_CRON = "*/1 * * * *"
+export const MODEL_TRAINING_JOB_CRON = CronExpression.EVERY_WEEK
 
 @Injectable()
 export class ModelTrainingJob extends Job {

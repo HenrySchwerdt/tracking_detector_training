@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
 import { Cron } from "@nestjs/schedule";
-import { JobMeta } from "./jobMeta.model";
+import { Model } from "mongoose";
+import { JobMeta, JobMetaDocument } from "./jobMeta.model";
 import { JobRun } from "./jobRun.model";
 import { Job } from "./jobs/job.interface";
 import { JobEventPublisherService } from "./jobs/jobEventPublisher.service";
@@ -9,7 +11,9 @@ import { ModelTrainingJob, MODEL_TRAINING_CRON } from "./jobs/modelTraining.job"
 @Injectable()
 export class JobService {
 
-    constructor(private readonly modelTrainingJob: ModelTrainingJob, private readonly jobEventPublisherService: JobEventPublisherService) {
+    constructor(private readonly modelTrainingJob: ModelTrainingJob,
+        private readonly jobEventPublisherService: JobEventPublisherService,
+        @InjectModel(JobMeta.name) private jobMetaModel: Model<JobMetaDocument>) {
 
     }
 
@@ -18,27 +22,51 @@ export class JobService {
         this.triggerJob(this.modelTrainingJob)
     }
 
+    private async checkJobMetaRepository(job: Job): Promise<JobMeta> {
+        let result = await this.jobMetaModel.findOne({name: job.getName()}).exec()
+        if (result == null) {
+            const model = new this.jobMetaModel({
+                jobName: job.getName(),
+                jobDescription: job.getDescription(),
+                lastJobRun: null,
+                cronPattern: job.getCronPattern(),
+                enabled: true
+            })
+            result = await model.save()
+        }
+        return result;
+    }
 
-    private triggerJob(job: Job) : boolean {
-        const publisher = this.jobEventPublisherService.create("someId");
+    private async triggerJob(job: Job) : Promise<boolean> {
+        const jobMeta = await this.checkJobMetaRepository(job);
+        if (!jobMeta.enabled) {
+            return false;
+        } 
+        const publisher = this.jobEventPublisherService.create(jobMeta._id);
+        await publisher.startJob()
         const result = job.execute(publisher);
+        if (result) {
+            await publisher.success();
+        } else {
+            await publisher.failure();
+        }
         return result;
     }
 
 
-    async findJobById(id: any) : Promise<JobMeta> {
+    async findJobById(id: string) : Promise<JobMeta> {
         throw new Error("Method not implemented.");
     }
-    async findAllRunsForJob(id: any) : Promise<JobRun[]> {
+    async findAllRunsForJob(id: string) : Promise<JobRun[]> {
         throw new Error("Method not implemented.");
     }
     async findAllJobs() : Promise<JobMeta[]> {
         throw new Error("Method not implemented.");
     }
-    async toggleJobById(id: any) : Promise<boolean> {
+    async toggleJobById(id: string) : Promise<boolean> {
         throw new Error("Method not implemented.");
     }
-    async triggerJobById(id: any) : Promise<boolean> {
+    async triggerJobById(id: string) : Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 

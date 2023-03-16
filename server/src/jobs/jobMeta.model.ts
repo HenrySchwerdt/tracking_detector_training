@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { randomUUID } from "crypto";
 import { HydratedDocument } from "mongoose";
 
 
@@ -6,8 +7,10 @@ export type JobMetaDocument = HydratedDocument<JobMeta>;
 
 @Schema()
 export class JobMeta {
-    @Prop()
-    id: string;
+    @Prop({ type: String, default: function genUUID() {
+        return randomUUID()
+    }})
+    _id: string;
 
     @Prop()
     jobName: string;
@@ -16,7 +19,7 @@ export class JobMeta {
     jobDescription: string;
 
     @Prop()
-    lastJobRun: string;
+    lastJobRun: number;
 
     @Prop()
     cronPattern: string;
@@ -27,3 +30,4 @@ export class JobMeta {
 
 
 export const JobMetaSchema = SchemaFactory.createForClass(JobMeta);
+

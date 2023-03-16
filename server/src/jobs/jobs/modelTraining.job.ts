@@ -7,9 +7,11 @@ export const MODEL_TRAINING_CRON = "*/1 * * * *"
 @Injectable()
 export class ModelTrainingJob implements Job {
 
+
     
     execute(jobEventPublisher : JobEventPublisher): boolean {
-        console.log("Hello World");
+        jobEventPublisher.info("Training Job Started")
+        console.log("Hallo Welt");
         return true;
     }
     
@@ -19,6 +21,10 @@ export class ModelTrainingJob implements Job {
 
     getDescription(): string {
         return "This job triggers a python function to train the model on the collected data."
+    }
+
+    getCronPattern(): string {
+        return MODEL_TRAINING_CRON;
     }
 
 }

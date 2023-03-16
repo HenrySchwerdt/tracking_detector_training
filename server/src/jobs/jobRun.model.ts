@@ -7,16 +7,19 @@ export type JobRunDocument = HydratedDocument<JobRun>;
 @Schema()
 export class JobRun {
     @Prop()
-    id: string;
+    _id: string;
 
     @Prop()
     status: string;
 
     @Prop()
-    startTime: Date;
+    startTime: number;
 
     @Prop()
-    endTime: Date;
+    endTime: number;
+
+    @Prop()
+    logs: string;
 }
 
 

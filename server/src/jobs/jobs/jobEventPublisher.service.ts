@@ -6,6 +6,9 @@ import { JobRun, JobRunDocument } from "../jobRun.model";
 
 
 export class JobEventPublisher {
+
+    private log: string = ""
+
     private constructor(private readonly jobId: string,
          private readonly jobMetaModel: Model<JobMetaDocument>,
           private readonly jobRunModel: Model<JobRunDocument>) {}
@@ -14,32 +17,65 @@ export class JobEventPublisher {
         return new JobEventPublisher(jobId, jobMetaModel, jobRunModel);
     }
 
-    startJob() {
+    async startJob() {
+        const startTime = Date.now();
+        await this.jobMetaModel.updateOne({_id: this.jobId}, {
+            lastJobRun: startTime
+        }).exec()
 
+        const jobRun = new this.jobRunModel({
+            id: this.jobId,
+            status: "RUNNING",
+            startTime: startTime,
+            endTime: null,
+            logs: this.log,
+        })
+        await jobRun.save();
     }
 
-    skipped() {
-
+    async skipped() {
+        await this.jobRunModel.updateOne({_id: this.jobId}, {
+            status: "SKIPPED",
+            endTime: Date.now()
+        }).exec()
     }
 
-    success() {
-
+    async success() {
+        await this.jobRunModel.updateOne({_id: this.jobId}, {
+            status: "SUCCESS",
+            endTime: Date.now()
+        }).exec()
     }
 
-    failure() {
-
+    async failure() {
+        await this.jobRunModel.updateOne({_id: this.jobId}, {
+            status: "FAILURE",
+            endTime: Date.now()
+        }).exec()
     }
 
-    info() {
-
+    info(...message : string[]) {
+        this.generateLogLine("Info", message)
     }
 
-    warn() {
-
+    warn(...message : string[]) {
+        this.generateLogLine("Warn", message)
     }
 
-    error() {
+    error(...message : string[]) {
+        this.generateLogLine("Error", message)
+    }
 
+    private generateLogLine(level: string, messages: string[]) {
+        this.log += (new Date(Date.now()).toISOString()) 
+        + " : " 
+        + level
+        + " : "
+        + messages.join(" ")
+        + "\n";
+        this.jobRunModel.updateOne({_id: this.jobId}, {
+            logs: this.log
+        }).exec()
     }
 }
 

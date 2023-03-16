@@ -5,6 +5,8 @@ import { JobController } from "./job.controller";
 import { JobService } from "./job.service";
 import { JobMeta, JobMetaSchema } from "./jobMeta.model";
 import { JobRun, JobRunSchema } from "./jobRun.model";
+import { JobEventPublisherService } from "./jobs/jobEventPublisher.service";
+import { ModelTrainingJob } from "./jobs/modelTraining.job";
 
 
 
@@ -15,6 +17,6 @@ import { JobRun, JobRunSchema } from "./jobRun.model";
         MongooseModule.forFeature([{ name: JobRun.name, schema: JobRunSchema }])
     ],
     controllers: [JobController],
-    providers: [JobService],
+    providers: [JobService, JobEventPublisherService, ModelTrainingJob],
 })
 export class JobModule { }

@@ -25,6 +25,15 @@ export class JobService {
     async findRunById(id: string) : Promise<JobRun> {
         return this.jobRunModel.findById(id);
     }
+
+    async findAllJobRuns(): Promise<JobRun[]> {
+        return this.jobRunModel.find();
+    }
+
+    async deleteJobRunById(id: string) {
+        this.jobRunModel.deleteOne({_id: id});
+    }
+
     async toggleJobById(id: string) : Promise<boolean> {
         throw new Error("Method not implemented.");
     }

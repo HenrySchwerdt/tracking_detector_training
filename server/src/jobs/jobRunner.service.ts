@@ -1,26 +1,32 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Cron } from "@nestjs/schedule";
-import { randomUUID } from "crypto";
 import mongoose, { Model } from "mongoose";
 import { JobMeta, JobMetaDocument } from "./jobMeta.model";
-import { JobRun, JobRunDocument } from "./jobRun.model";
+import { CleanUpJob, CLEAN_UP_JOB_CRON } from "./jobs/cleanUpJob";
 import { Job } from "./jobs/job.interface";
 import { JobEventPublisherService } from "./jobs/jobEventPublisher.service";
-import { ModelTrainingJob, MODEL_TRAINING_CRON } from "./jobs/modelTraining.job";
+import { ModelTrainingJob, MODEL_TRAINING_JOB_CRON } from "./jobs/modelTraining.job";
 
 @Injectable()
 export class JobRunnerService {
 
     constructor(private readonly modelTrainingJob: ModelTrainingJob,
+        private readonly cleanUpJob: CleanUpJob,
         private readonly jobEventPublisherService: JobEventPublisherService,
+
         @InjectModel(JobMeta.name) private jobMetaModel: Model<JobMetaDocument>) {
 
     }
 
-    @Cron(MODEL_TRAINING_CRON)
+    @Cron(MODEL_TRAINING_JOB_CRON)
     handleModelTrainingJob() {
-        this.triggerJob(this.modelTrainingJob)
+        this.triggerJob(this.modelTrainingJob);
+    }
+    
+    @Cron(CLEAN_UP_JOB_CRON)
+    handleCleanUpJob() {
+        this.triggerJob(this.cleanUpJob);
     }
 
     private async checkJobMetaRepository(job: Job): Promise<JobMeta> {
@@ -35,6 +41,11 @@ export class JobRunnerService {
                 enabled: true
             })
             result = await model.save()
+        }
+        // If CronPatternChanges
+        if (result.cronPattern != job.getCronPattern()) {
+            await this.jobMetaModel.updateOne({_id: result.id}, {cronPattern: job.getCronPattern()}).exec()
+            result = await this.jobMetaModel.findOne({name: job.getName()}).exec()
         }
         return result;
     }

@@ -3,13 +3,11 @@ import { Job } from "./job.interface";
 import { JobEventPublisher } from "./jobEventPublisher.service";
 import { call } from "funker"
 
-export const MODEL_TRAINING_CRON = "*/1 * * * *"
+export const MODEL_TRAINING_JOB_CRON = "*/1 * * * *"
 
 @Injectable()
 export class ModelTrainingJob implements Job {
 
-
-    
     async execute(jobEventPublisher : JobEventPublisher): Promise<boolean> {
         return new Promise(resolve => {
             jobEventPublisher.info("Training Job Started")
@@ -22,10 +20,6 @@ export class ModelTrainingJob implements Job {
                 resolve(true);
             })
         })
-        
-
-        
-        return true;
     }
     
     getName(): string {
@@ -37,7 +31,7 @@ export class ModelTrainingJob implements Job {
     }
 
     getCronPattern(): string {
-        return MODEL_TRAINING_CRON;
+        return MODEL_TRAINING_JOB_CRON;
     }
 
 }

@@ -9,14 +9,16 @@ import { ModelTrainingJob } from './jobDefinitions/modelTraining.job';
 import { JobService } from './job.service';
 import { CleanUpJob } from './jobDefinitions/cleanUpJob';
 import { RequestDataExportJob } from './jobDefinitions/requestDataExportJob';
-import { RequestSchema, Request } from 'src/requests/request.model';
 import { RequestsService } from 'src/requests/requests.service';
+import { RequestsModule } from 'src/requests/requests.module';
+import { MinioModule } from 'src/minio/minio.module';
 
 @Module({
   imports: [
+    RequestsModule,
+    MinioModule,
     MongooseModule.forFeature([{ name: JobMeta.name, schema: JobMetaSchema }]),
     MongooseModule.forFeature([{ name: JobRun.name, schema: JobRunSchema }]),
-    MongooseModule.forFeature([{ name: Request.name, schema: RequestSchema }]),
   ],
   controllers: [JobController],
   providers: [
@@ -28,6 +30,6 @@ import { RequestsService } from 'src/requests/requests.service';
     JobRunnerService,
     RequestsService,
   ],
-  exports: [RequestsService],
+  exports: [JobService],
 })
 export class JobModule {}

@@ -1,30 +1,34 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Client } from 'minio';
 import { MINIO_CONNECTION } from 'nestjs-minio';
 
-const TRAINING_DATA_BUCKET_NAME = "training-data";
-const MODEL_BUCKET = "models"
+const TRAINING_DATA_BUCKET = "training-data";
+const MODEL_BUCKET = "models";
+const MONGO_DB_BACKUP_BUCKET =  "mongo-db-backup";
 
 @Injectable()
 export class MinioService {
+  private readonly logger = new Logger(MinioService.name)
   constructor(@Inject(MINIO_CONNECTION) private readonly minioClient: Client) { }
-  private static initBucket(name: string, minioClient: Client) {
+  
+  
+  private initBucket(name: string) {
     var versioningStateConfig = {Status:"Enabled"}
-    minioClient.bucketExists(name, (err, exists) => {
+    this.minioClient.bucketExists(name, (err, exists) => {
       if (err) {
-        console.log(err);
+        this.logger.error(err);
       }
       if (!exists) {
-        minioClient.makeBucket(name, "eu-central-1", (err) => {
+        this.minioClient.makeBucket(name, "eu-central-1", (err) => {
           if (err) {
-            console.log("error creating bucket")
+            this.logger.error("Error creating bucket with name: "+name);
           } else {
-            console.log("Created Bucket.")
-            minioClient.setBucketVersioning(name, versioningStateConfig, function (error){
+            this.logger.log("Created bucket with name: "+ name);
+            this.minioClient.setBucketVersioning(name, versioningStateConfig, (error) => {
               if (error) {
-                return console.log(error)
+                return this.logger.error("Error updating versioning for bucket with name: "+ name, err);
               }
-              console.log("Success")
+              this.logger.log("Updated versioning for bucket with name: "+ name);
             })
           }
         })
@@ -32,14 +36,15 @@ export class MinioService {
     })
   }
   onModuleInit(): void {
-    MinioService.initBucket(TRAINING_DATA_BUCKET_NAME, this.minioClient);
-    MinioService.initBucket(MODEL_BUCKET, this.minioClient);
+    this.initBucket(TRAINING_DATA_BUCKET);
+    this.initBucket(MODEL_BUCKET);
+    this.initBucket(MONGO_DB_BACKUP_BUCKET);
   }
 
   async putTrainingCompressedTrainingData(filePath: string, metaData: any) {
     return new Promise((resolve, reject) => 
     this.minioClient.fPutObject(
-      TRAINING_DATA_BUCKET_NAME,
+      TRAINING_DATA_BUCKET,
       "training-data.csv.gz",
       filePath,
       metaData,

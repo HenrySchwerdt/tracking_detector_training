@@ -12,7 +12,7 @@
                         enabled: {{ job.enabled }} <br>
                     </div>
                     <div class="col-2">
-                        <a class="btn btn-primary" href="/trackingDetectorService/job-runs/{{job.id}}">See Runs</a>
+                        <a class="btn btn-primary" href="/tracking-detector/job-runs/{{job.id}}">See Runs</a>
                         <button type="button" class="btn btn-primary" onclick="triggerJob( '{{job.jobName}}' )">Trigger</button>
                         <button type="button" class="btn btn-primary" onclick="toggleJob( '{{job.jobName}}' )">Toggle</button>
                     </div>
@@ -24,10 +24,10 @@
         {{/each}}
         <script>
             function triggerJob(jobName) {
-                axios.post("/jobs/trigger/" + jobName)
+                axios.post("/tracking-detector/jobs/trigger/" + jobName)
             }
             function toggleJob(jobName) {
-                axios.patch("/jobs/toggle/" + jobName)
+                axios.patch("/tracking-detector/jobs/toggle/" + jobName)
             }
         </script>
     </div>

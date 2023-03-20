@@ -4,7 +4,7 @@ import { JobMeta } from "./jobMeta.model";
 import { JobRun } from "./jobRun.model";
 import { JobRunnerService } from "./jobRunner.service";
 
-@Controller("jobs")
+@Controller("tracking-detector/jobs")
 export class JobController {
 
     constructor(private readonly jobService: JobService, private readonly jobRunnerService : JobRunnerService) {}

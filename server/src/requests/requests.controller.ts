@@ -3,7 +3,7 @@ import { RequestDto } from "./request.dto";
 import { Request } from "./request.model";
 import { RequestsService } from "./requests.service";
 
-@Controller('requests')
+@Controller('tracking-detector/requests')
 export class RequestsController {
     constructor(private readonly requestsService: RequestsService) {}
 

@@ -2,7 +2,7 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { JobService } from 'src/jobs/job.service';
 
-@Controller('trackingDetectorService')
+@Controller('tracking-detector')
 export class HbsController {
   constructor(private readonly jobService: JobService) {}
   @Get()

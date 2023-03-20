@@ -9,6 +9,7 @@ export class JobEventPublisher {
 
     private log: string = "\n"
     private currentRunId : string = null;
+    private isTerminated: boolean = false;
 
     private constructor(private readonly jobId: string,
          private readonly jobMetaModel: Model<JobMetaDocument>,
@@ -16,6 +17,10 @@ export class JobEventPublisher {
 
     static createJobEventPublisher(jobId: string, jobMetaModel: Model<JobMetaDocument>, jobRunModel: Model<JobRunDocument>): JobEventPublisher {
         return new JobEventPublisher(jobId, jobMetaModel, jobRunModel);
+    }
+
+    get getTerminated(): boolean {
+        return this.isTerminated
     }
 
     async startJob() {
@@ -37,13 +42,16 @@ export class JobEventPublisher {
     }
 
     async skipped() {
+        this.isTerminated = true;
         await this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             status: "SKIPPED",
             endTime: Date.now()
         }).exec()
+
     }
 
     async success() {
+        this.isTerminated = true;
         await this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             status: "SUCCESS",
             endTime: Date.now()
@@ -51,6 +59,7 @@ export class JobEventPublisher {
     }
 
     async failure() {
+        this.isTerminated = true;
         await this.jobRunModel.findByIdAndUpdate(this.currentRunId, {
             status: "FAILURE",
             endTime: Date.now()

@@ -6,7 +6,7 @@ import { JobService } from "../job.service";
 import { JobMeta, JobMetaDocument } from "../jobMeta.model";
 import { JobRun } from "../jobRun.model";
 import { Job } from "./job.interface";
-import { JobEventPublisher } from "./jobEventPublisher.service";
+import { JobEventPublisher, JobEventPublisherService } from "./jobEventPublisher.service";
 
 export const CLEAN_UP_JOB_CRON = CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT
 
@@ -15,8 +15,8 @@ const DELETION_THREASH_HOLD = 2629800000 // One Month in miliseconds
 @Injectable()
 export class CleanUpJob extends Job {
 
-    constructor(private readonly jobService: JobService,  @InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>) {
-        super(jobMetaModel);
+    constructor(private readonly jobService: JobService,  @InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>, jobEventPublisherService: JobEventPublisherService) {
+        super(jobMetaModel, jobEventPublisherService);
     }
 
     async execute(jobEventPublisher: JobEventPublisher): Promise<boolean> {

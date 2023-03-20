@@ -30,6 +30,6 @@ import { MinioModule } from 'src/minio/minio.module';
     JobRunnerService,
     RequestsService,
   ],
-  exports: [JobService],
+  exports: [JobService, ],
 })
 export class JobModule {}

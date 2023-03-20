@@ -1,6 +1,6 @@
 import mongoose, { Model } from "mongoose";
 import { JobMeta, JobMetaDocument } from "../jobMeta.model";
-import { JobEventPublisher } from "./jobEventPublisher.service";
+import { JobEventPublisher, JobEventPublisherService } from "./jobEventPublisher.service";
 
 export interface JobInterface {
     execute(jobEventPublisher: JobEventPublisher): Promise<boolean>;
@@ -14,12 +14,37 @@ export interface JobInterface {
 
 export abstract class Job implements JobInterface {
 
-    constructor(private jobMetaModel: Model<JobMetaDocument>) {}
+    private jobId? : string;
+
+    constructor(private jobMetaModel: Model<JobMetaDocument>, private jobEventPublisherService: JobEventPublisherService) {}
 
     abstract execute(jobEventPublisher: JobEventPublisher): Promise<boolean>
     abstract getName(): string
     abstract getDescription(): string
     abstract getCronPattern(): string
+
+    async start() : Promise<void> {
+        const jobMeta = await this.jobMetaModel.findById(this.jobId);
+        if (!jobMeta.enabled) {
+            return;
+        }
+        const publisher = this.jobEventPublisherService.create(this.jobId);
+        await publisher.startJob()
+        try {
+            const result = await this.execute(publisher);
+            if (publisher.getTerminated) {
+                return;
+            }
+            if (result) {
+                await publisher.success();
+            } else {
+                await publisher.failure();
+            }
+        } catch(e) {
+            publisher.error("An error occured: ", e)
+        }
+        
+    }
 
     onModuleInit(): void {
         console.log("Initialzing Job: " + this.getName())
@@ -39,7 +64,9 @@ export abstract class Job implements JobInterface {
                 saved = model.save()
                 
             }
+           
             saved.then(savedValue => {
+                this.jobId = savedValue.id;
                 // If CronPatternChanges
                 if (savedValue.cronPattern != this.getCronPattern()) {
                     this.jobMetaModel.updateOne({ _id: savedValue.id }, { cronPattern: this.getCronPattern() }).exec()

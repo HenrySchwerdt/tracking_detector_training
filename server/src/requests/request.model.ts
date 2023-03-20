@@ -35,6 +35,8 @@ export class Request {
   requestHeaders: any[];
   @Prop()
   initiater: string;
+  @Prop()
+  label: boolean;
 }
 
 export const RequestSchema = SchemaFactory.createForClass(Request);

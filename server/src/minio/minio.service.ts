@@ -1,7 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { Client, InjectMinio } from 'minio';
+import { Inject, Injectable } from '@nestjs/common';
+import { Client } from 'minio';
+import { MINIO_CONNECTION } from 'nestjs-minio';
 
 @Injectable()
 export class MinioService {
-  constructor(@InjectMinio() private readonly minioClient: Client) {}
+  constructor(@Inject(MINIO_CONNECTION) private readonly minioClient: Client) {}
 }
+
+
+
+

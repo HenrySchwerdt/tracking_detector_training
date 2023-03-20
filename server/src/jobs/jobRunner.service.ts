@@ -64,20 +64,8 @@ export class JobRunnerService {
         return result;
     }
 
-    private async triggerJob(job: Job): Promise<boolean> {
-        const jobMeta = await this.checkJobMetaRepository(job);
-        if (!jobMeta.enabled) {
-            return false;
-        }
-        const publisher = this.jobEventPublisherService.create(jobMeta.id);
-        await publisher.startJob()
-        const result = await job.execute(publisher);
-        if (result) {
-            await publisher.success();
-        } else {
-            await publisher.failure();
-        }
-        return result;
+    private async triggerJob(job: Job): Promise<void> {
+        job.start();
     }
 
 

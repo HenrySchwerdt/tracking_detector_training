@@ -9,6 +9,7 @@ import { JobMeta, JobMetaDocument } from '../jobMeta.model';
 import { Job } from './job.interface';
 import { JobEventPublisher, JobEventPublisherService } from './jobEventPublisher.service';
 import { createGzip } from 'zlib';
+import { MinioService } from 'src/minio/minio.service';
 
 
 export const REQUEST_DATA_EXPORT_JOB_CRON = CronExpression.EVERY_WEEK;
@@ -47,6 +48,7 @@ export class RequestDataExportJob extends Job {
 
   constructor(
     private readonly requestsService: RequestsService,
+    private readonly minioService: MinioService,
     @InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>,
     jobEventPublisherService: JobEventPublisherService
   ) {
@@ -82,7 +84,7 @@ export class RequestDataExportJob extends Job {
     const error = await this.compressFile(unZippedFileName, zippedFileName);
     jobEventPublisher.info(JSON.stringify(error))
     jobEventPublisher.info("Finished compression...")
-
+    await this.minioService.putTrainingCompressedTrainingData(zippedFileName, {});
     unlinkSync(unZippedFileName);
     jobEventPublisher.info("Deleted '", unZippedFileName, "' from disk...")
     unlinkSync(zippedFileName);

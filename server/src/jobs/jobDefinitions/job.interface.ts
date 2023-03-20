@@ -42,6 +42,7 @@ export abstract class Job implements JobInterface {
             }
         } catch(e) {
             publisher.error("An error occured: ", e)
+            await publisher.failure();
         }
         
     }

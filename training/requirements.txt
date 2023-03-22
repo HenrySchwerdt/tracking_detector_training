@@ -1,2 +1,7 @@
 funker
-minio
+ak-minio
+pandas
+numpy
+tensorflowjs
+sklearn
+tensorflow

@@ -2,9 +2,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Client } from 'minio';
 import { MINIO_CONNECTION } from 'nestjs-minio';
 
-const TRAINING_DATA_BUCKET = "training-data";
-const MODEL_BUCKET = "models";
-const MONGO_DB_BACKUP_BUCKET =  "mongo-db-backup";
+const TRAINING_DATA_BUCKET = process.env.TRAINING_DATA_BUCKET_NAME;
+const MODEL_BUCKET = process.env.MODEL_BUCKET_NAME;
+const MONGO_DB_BACKUP_BUCKET =  process.env.MONGO_DB_BACKUP_BUCKET_NAME;
 
 @Injectable()
 export class MinioService {
@@ -55,6 +55,10 @@ export class MinioService {
         resolve(objInfo);
       }
     ))
+  }
+
+  async getModelFilesByFolderAndName(modelFolder: string, fileName, string) {
+
   }
 }
 

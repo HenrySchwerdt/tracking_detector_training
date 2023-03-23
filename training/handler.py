@@ -11,16 +11,17 @@ from minio import Minio
 import tensorflow as tf
 # from sklearn.model_selection import KFold
 
-
-DATA_BUCKET_NAME = "training-data"
-MODEL_BUCKET_NAME = "models"
+MINIO_ACCESS_KEY = os.environ['MINIO_ACCESS_KEY']
+MINIO_SECRET_KEY = os.environ['MINIO_PRIVATE_KEY']
+DATA_BUCKET_NAME = os.environ['TRAINING_DATA_BUCKET_NAME']
+MODEL_BUCKET_NAME = os.environ['MODEL_BUCKET_NAME']
 OBJECT_NAME = "training-data.csv.gz"
 
 
 def extract_data():
     minioClient = Minio('minio:9000',
-    access_key='trackingDetector',
-    secret_key='Strong#Pass#2022',
+    access_key=MINIO_ACCESS_KEY,
+    secret_key=MINIO_SECRET_KEY,
     secure=False,
     )
 
@@ -70,8 +71,8 @@ def train_and_save_model(data_frame):
 
 def upload_model_to_bucket():
     minioClient = Minio('minio:9000',
-    access_key='trackingDetector',
-    secret_key='Strong#Pass#2022',
+    access_key=MINIO_ACCESS_KEY,
+    secret_key=MINIO_SECRET_KEY,
     secure=False,
     )
 

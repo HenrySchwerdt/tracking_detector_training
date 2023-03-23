@@ -11,33 +11,76 @@ services:
       - server
       - training
 
+  # Auth with Keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: ${DB_VENDOR}
+      DB_ADDR: ${DB_ADDR}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_SCHEMA: ${DB_SCHEMA}
+      DB_PASSWORD: ${DB_PASSWORD}
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    volumes:
+        - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  
+  # Object Storage MinIO
   minio:
     image: minio/minio
     container_name: minio
     volumes:
       - minio_storage:/data
     environment:
-      MINIO_ROOT_USER: trackingDetector
-      MINIO_ROOT_PASSWORD: Strong#Pass#2022
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_PRIVATE_KEY}
     command: server --console-address ":9001" /data
   
+  # MongoDB
   db:
     image: mongo:latest
     container_name: db
     volumes:
       - mongo_storage:/data/db
-
+  
+  # Application Server
   server:
     build: ./server
     container_name: server
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_PRIVATE_KEY: ${MINIO_PRIVATE_KEY}
+      MODEL_BUCKET_NAME: ${MODEL_BUCKET_NAME}
+      TRAINING_DATA_BUCKET_NAME: ${TRAINING_DATA_BUCKET_NAME}
+      MONGO_DB_BACKUP_BUCKET_NAME: ${MONGO_DB_BACKUP_BUCKET_NAME}
     depends_on:
       - db
       - minio
-
+      - keycloak
+  
+  # Model Training Lambda
   training:
     build: ./training
     container_name: training
     command: python handler.py
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_PRIVATE_KEY: ${MINIO_PRIVATE_KEY}
+      MODEL_BUCKET_NAME: ${MODEL_BUCKET_NAME}
+      TRAINING_DATA_BUCKET_NAME: ${TRAINING_DATA_BUCKET_NAME}
+      MONGO_DB_BACKUP_BUCKET_NAME: ${MONGO_DB_BACKUP_BUCKET_NAME}
     depends_on:
       - db
       - minio
@@ -47,3 +90,4 @@ services:
 volumes:
   minio_storage: {}
   mongo_storage: {}
+  postgres_data: {}

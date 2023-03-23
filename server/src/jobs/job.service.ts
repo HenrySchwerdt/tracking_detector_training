@@ -33,8 +33,8 @@ export class JobService {
     this.jobRunModel.deleteOne({ _id: id });
   }
 
-  async toggleJobById(name: string): Promise<boolean> {
-    const job = await this.jobMetaModel.findOne({ jobName: name });
+  async toggleJobById(id: string): Promise<boolean> {
+    const job = await this.jobMetaModel.findById(id);
 
     await this.jobMetaModel.updateOne(
       { _id: job.id },

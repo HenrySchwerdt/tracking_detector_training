@@ -20,8 +20,9 @@ export class JobRunnerService {
    
 
 
-    triggerJobByName(name: string) {
-        switch(name) {
+    async triggerJobByName(id: string) {
+        const jobMeta = await this.jobMetaModel.findById(id)
+        switch(jobMeta.jobName) {
             case "CleanUpJob": this.handleCleanUpJob(); break;
             case "ModelTraining": this.handleModelTrainingJob(); break;
             case "RequestDataExportJob": this.handleRequestDataExportJob(); break;

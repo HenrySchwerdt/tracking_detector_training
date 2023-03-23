@@ -30,8 +30,7 @@ async function bootstrap() {
   })
 
   const options = new DocumentBuilder()
-    .setTitle('My API')
-    .setDescription('API description')
+    .setTitle('Tracking Detector API')
     .setVersion('1.0')
     .build();
 

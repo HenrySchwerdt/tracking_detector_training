@@ -13,8 +13,8 @@
                     </div>
                     <div class="col-2">
                         <a class="btn btn-primary" href="/tracking-detector/job-runs/{{job.id}}">See Runs</a>
-                        <button type="button" class="btn btn-primary" onclick="triggerJob( '{{job.jobName}}' )">Trigger</button>
-                        <button type="button" class="btn btn-primary" onclick="toggleJob( '{{job.jobName}}' )">Toggle</button>
+                        <button type="button" class="btn btn-primary" onclick="triggerJob( '{{job.id}}' )">Trigger</button>
+                        <button type="button" class="btn btn-primary" onclick="toggleJob( '{{job.id}}' )">Toggle</button>
                     </div>
                 </div>
 
@@ -23,11 +23,11 @@
         </div>
         {{/each}}
         <script>
-            function triggerJob(jobName) {
-                axios.post("/tracking-detector/jobs/trigger/" + jobName)
+            function triggerJob(jobId) {
+                axios.post("/tracking-detector/jobs/" + jobId + "/trigger")
             }
             function toggleJob(jobName) {
-                axios.patch("/tracking-detector/jobs/toggle/" + jobName)
+                axios.patch("/tracking-detector/jobs/" +  jobId + "/toggle")
             }
         </script>
     </div>

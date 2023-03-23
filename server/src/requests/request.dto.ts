@@ -1,19 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
 export class RequestDto {
-    @ApiProperty()
+    @ApiProperty({example: "https://www.google.de", description: "The url the requests wants to call"})
     readonly url: string;
-    @ApiProperty()
+    @ApiProperty({example: "outermost_frame", description: "Outermost frame attribute provided by chrome"})
     readonly frameType: string;
-    @ApiProperty()
+    @ApiProperty({example: "GET", description: "The request method"})
     readonly method: string;
-    @ApiProperty()
+    @ApiProperty({example: "xmlhttprequest", description: "The request type provided by chrome"})
     readonly type: string;
-    @ApiProperty()
+    @ApiProperty({example: "1", description: "The frame Id provided by chrome"})
     readonly frameId: number;
-    @ApiProperty()
+    @ApiProperty({example: [{"Accept": "application/json"}], description: "The requestheaders provided by chrome"})
     readonly requestHeaders: any[];
-    @ApiProperty()
+    @ApiProperty({example: "google.com", description: "The request initiator"})
     readonly initiater: string;
-    @ApiProperty()
+    @ApiProperty({example: true, description: "The label true: Tracking, false: non-Tracking"})
     readonly label: boolean;
 }

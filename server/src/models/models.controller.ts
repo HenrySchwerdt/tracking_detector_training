@@ -1,6 +1,11 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 
-@Controller()
+@Controller('tracking-detector/models')
 export class ModelsController {
 
+
+    @Get(":modelId/:resource")
+    getModelData(@Param() params) {
+
+    }
 }

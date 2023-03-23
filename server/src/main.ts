@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'express-handlebars';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 
 async function bootstrap() {
@@ -27,6 +28,15 @@ async function bootstrap() {
       }
     }
   })
+
+  const options = new DocumentBuilder()
+    .setTitle('My API')
+    .setDescription('API description')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('tracking-detector/api', app, document)
 
   app.engine('hbs', hbsObj.engine);
   app.setViewEngine('hbs')

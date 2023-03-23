@@ -54,4 +54,11 @@ export class HbsController {
       jobRun: jobRun,
     });
   }
+
+  @Get('swagger') 
+  getSwaggerUi(@Res() res: Response) {
+    return res.render('swagger', {
+      layout: 'main'
+    });
+  }
 }

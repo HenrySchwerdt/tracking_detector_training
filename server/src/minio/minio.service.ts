@@ -60,6 +60,17 @@ export class MinioService {
   async getModelFilesByFolderAndName(modelFolder: string, fileName, string) {
 
   }
+
+  async getAllModelsAvailableToDownload() : Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      var data = []
+      var stream = this.minioClient.listObjects(MODEL_BUCKET, '', true)
+      stream
+        .on('data', obj => data.push(obj))
+        .on('end', obj => resolve(data))
+        .on('error', err => reject(err))
+    });
+  }
 }
 
 

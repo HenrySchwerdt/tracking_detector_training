@@ -2,12 +2,13 @@ import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { JobService } from 'src/jobs/job.service';
+import { ModelsService } from 'src/models/models.service';
 
 @Controller('tracking-detector')
 @ApiTags('ui')
 @ApiBearerAuth()
 export class HbsController {
-  constructor(private readonly jobService: JobService) {}
+  constructor(private readonly jobService: JobService, private readonly modelsService: ModelsService) {}
   @Get()
   @ApiOperation({summary: "Returns the root admin page",})
   root(@Res() res: Response) {
@@ -20,17 +21,17 @@ export class HbsController {
   @ApiOperation({summary: "Returns the status admin page",})
   status(@Res() res: Response) {
     return res.render('status', {
-      layout: 'main',
-      message: 'HelloWorld',
+      layout: 'main'
     });
   }
 
   @Get('models')
   @ApiOperation({summary: "Returns the models admin page",})
-  models(@Res() res: Response) {
+  async models(@Res() res: Response) {
+    const models = await this.modelsService.getAllModelsByFolderAndName();
     return res.render('models', {
       layout: 'main',
-      message: 'HelloWorld',
+      models: models,
     });
   }
 

@@ -44,7 +44,7 @@ const types = [
 const frameTypes = ["outermost_frame", "fenced_frame", "sub_frame"];
 
 @Injectable()
-export class RequestDataExportJob extends Job {
+export class RequestDataExportJob104 extends Job {
 
   constructor(
     private readonly requestsService: RequestsService,

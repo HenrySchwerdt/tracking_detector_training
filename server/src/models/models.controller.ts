@@ -1,4 +1,5 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Get, Param, Res, StreamableFile } from "@nestjs/common";
+import { Response } from "express";
 import { MinioService } from "src/minio/minio.service";
 import { ModelsService } from "./models.service";
 
@@ -6,9 +7,10 @@ import { ModelsService } from "./models.service";
 export class ModelsController {
     constructor (private readonly modelsService: ModelsService) {}
 
-    @Get(":modelId/:resource")
-    getModelData(@Param() params) {
-
+    @Get("data/:modelId/:resource")
+    async getModelData(@Param('modelId') modelId: string, @Param('resource') resource: string, @Res() res: Response): Promise<ReadableStream> {
+        const stream =  await this.modelsService.getFileFromModel(modelId, resource);
+        return stream
     }
 
     @Get("data")

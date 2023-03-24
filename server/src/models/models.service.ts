@@ -5,6 +5,9 @@ import { MinioService } from "src/minio/minio.service";
 export class ModelsService {
     constructor(private readonly minioService: MinioService) { }
 
+    async getFileFromModel(modelName: string, fileName: string) {
+        return this.minioService.getModelFilesByFolderAndName(modelName, fileName);
+    }
 
     async getAllModelsByFolderAndName() {
         const models: any[] = await this.minioService.getAllModelsAvailableToDownload()
@@ -14,7 +17,7 @@ export class ModelsService {
         values.forEach(value => {
             modelsObj.push({
                 name: value,
-                resources: models.filter(x => x.name.split("/")[0] == value)
+                resources: models.filter(x => x.name.split("/")[0] == value).map(x => ({...x, fileName: x.name.split("/")[1] }))
             })
         })
 

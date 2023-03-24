@@ -15,9 +15,10 @@
                  <h6 class="card-title">Model Data</h6>
                  {{#each model.resources as | resource |}}
                  <div class="card mt-2 p-2">
-                    Filename: {{ resource.name }} <br>
+                    Filename: {{ resource.fileName }} <br>
                     Size: {{ resource.size }}B <br>
                     LastModified: {{ resource.lastModified }} <br>
+                    <a class="btn btn-primary" href="/tracking-detector/models/data/{{model.name}}/{{resource.fileName}}" download>Download {{ resource.name }}</a>
                  </div>
                  {{/each}}
                 

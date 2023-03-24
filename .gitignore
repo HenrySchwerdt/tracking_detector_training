@@ -1,2 +1,4 @@
 entrypoint/node_modules
 entrypoint/package-lock.json
+ovpn-data
+scripts

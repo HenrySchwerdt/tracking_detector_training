@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Cursor, Model, QueryOptions } from 'mongoose';
-import { RequestDto } from './request.dto';
-import { Request, RequestDocument } from './request.model';
+import { RequestDto } from '../dto/request.dto';
+import { Request, RequestDocument } from '../repository/request.model';
 
 @Injectable()
 export class RequestsService {

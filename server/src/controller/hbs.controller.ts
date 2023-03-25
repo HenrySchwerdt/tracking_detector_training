@@ -1,8 +1,9 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { JobService } from 'src/jobs/job.service';
-import { ModelsService } from 'src/models/models.service';
+import { JobService } from 'src/service/job.service';
+import { ModelsService } from 'src/service/models.service';
+
 
 @Controller('tracking-detector')
 @ApiTags('ui')

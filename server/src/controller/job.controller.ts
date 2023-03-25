@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { JobService } from "./job.service";
-import { JobMeta } from "./jobMeta.model";
-import { JobRun } from "./jobRun.model";
-import { JobRunnerService } from "./jobRunner.service";
+import { JobService } from "../service/job.service";
+import { JobMeta } from "../repository/jobMeta.model";
+import { JobRun } from "../repository/jobRun.model";
+import { JobRunnerService } from "../service/jobRunner.service";
 
 @ApiBearerAuth()
 @ApiTags('jobs-API')

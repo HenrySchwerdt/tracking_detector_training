@@ -1,10 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { Job } from "./job.interface";
-import { JobEventPublisher, JobEventPublisherService } from "./jobEventPublisher.service";
+import { Job, JobDefinition } from "./job.interface";
+import { JobEventPublisher } from "./jobEventPublisher.service";
 import { call } from "funker"
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { JobMeta, JobMetaDocument } from "../jobMeta.model";
 import { CronExpression } from "@nestjs/schedule";
 
 export const MODEL_TRAINING_JOB_CRON = CronExpression.EVERY_WEEK
@@ -12,8 +9,8 @@ export const MODEL_TRAINING_JOB_CRON = CronExpression.EVERY_WEEK
 @Injectable()
 export class ModelTrainingJob extends Job {
 
-    constructor(@InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>, jobEventPublisherService: JobEventPublisherService) {
-        super(jobMetaModel, jobEventPublisherService);
+    constructor(jobDefinition: JobDefinition) {
+        super(jobDefinition);
     }
 
     async execute(jobEventPublisher : JobEventPublisher): Promise<boolean> {

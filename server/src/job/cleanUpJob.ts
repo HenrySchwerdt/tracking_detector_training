@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { CronExpression } from "@nestjs/schedule";
 import { Model } from "mongoose";
-import { JobService } from "../job.service";
-import { JobMeta, JobMetaDocument } from "../jobMeta.model";
-import { JobRun } from "../jobRun.model";
-import { Job } from "./job.interface";
+import { JobService } from "../service/job.service";
+import { JobMeta, JobMetaDocument } from "../repository/jobMeta.model";
+import { JobRun } from "../repository/jobRun.model";
+import { Job, JobDefinition } from "./job.interface";
 import { JobEventPublisher, JobEventPublisherService } from "./jobEventPublisher.service";
 
 export const CLEAN_UP_JOB_CRON = CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT
@@ -15,8 +15,8 @@ const DELETION_THREASH_HOLD = 2629800000 // One Month in miliseconds
 @Injectable()
 export class CleanUpJob extends Job {
 
-    constructor(private readonly jobService: JobService,  @InjectModel(JobMeta.name) jobMetaModel: Model<JobMetaDocument>, jobEventPublisherService: JobEventPublisherService) {
-        super(jobMetaModel, jobEventPublisherService);
+    constructor(jobDefinition: JobDefinition, private  jobService: JobService) {
+        super(jobDefinition);
     }
 
     async execute(jobEventPublisher: JobEventPublisher): Promise<boolean> {
@@ -37,18 +37,6 @@ export class CleanUpJob extends Job {
         })
         jobEventPublisher.info("Job finished with "+numberOfDeletions, "deletions.");
         return true;
-    }
-
-    getName(): string {
-        return "CleanUpJob";
-    }
-
-    getDescription(): string {
-        return "Deletes old Job runs from the mongodb";
-    }
-
-    getCronPattern(): string {
-        return CLEAN_UP_JOB_CRON;
     }
 
 }

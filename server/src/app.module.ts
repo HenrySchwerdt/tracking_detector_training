@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleModule } from '@nestjs/schedule';
 import { StatusMonitorModule } from 'nestjs-status-monitor';
-import { HbsModule } from './hbs/hbs.module';
+import { HbsModule } from './module/hbs.module';
 import { HealthController } from './health.controller';
-import { JobModule } from './jobs/job.module';
-import { ModelsModule } from './models/models.module';
-import { RequestsModule } from './requests/requests.module';
+import { JobModule } from './module/job.module';
+import { ModelsModule } from './module/models.module';
+import { RequestsModule } from './module/requests.module';
 
 @Module({
   imports: [

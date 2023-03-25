@@ -1,7 +1,6 @@
 import { Controller, Get, Param, Res, StreamableFile } from "@nestjs/common";
 import { Response } from "express";
-import { MinioService } from "src/minio/minio.service";
-import { ModelsService } from "./models.service";
+import { ModelsService } from "../service/models.service";
 
 @Controller('tracking-detector/models')
 export class ModelsController {

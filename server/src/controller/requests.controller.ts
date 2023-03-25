@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { RequestDto } from "./request.dto";
-import { Request } from "./request.model";
-import { RequestsService } from "./requests.service";
+import { RequestDto } from "../dto/request.dto";
+import { Request } from "../repository/request.model";
+import { RequestsService } from "../service/requests.service";
 
 @ApiBearerAuth()
 @ApiTags('requests')

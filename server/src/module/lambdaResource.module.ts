@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { LambdaResource, LambdaResourceSchema } from "./lambdaResource.model";
-import { LambdaResourceService } from "./lambdaResource.service";
+import { LambdaResource, LambdaResourceSchema } from "../repository/lambdaResource.model";
+import { LambdaResourceService } from "../service/lambdaResource.service";
 
 
 

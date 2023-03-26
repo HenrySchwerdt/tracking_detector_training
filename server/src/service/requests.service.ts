@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Cursor, Model, QueryOptions } from 'mongoose';
+import { Model } from 'mongoose';
 import { RequestDto } from '../dto/request.dto';
 import { Request, RequestDocument } from '../repository/request.model';
 
@@ -20,10 +20,10 @@ export class RequestsService {
   }
 
   findAllByCursor() {
-    return this.requestModel.find().cursor()
+    return this.requestModel.find().cursor();
   }
 
-  async getCountOfRequestDocuments() : Promise<number> {
+  async getCountOfRequestDocuments(): Promise<number> {
     return this.requestModel.find().count();
   }
 }

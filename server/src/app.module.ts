@@ -58,8 +58,8 @@ import { RequestsModule } from './module/requests.module';
     JobModule,
     RequestsModule,
     HbsModule,
-    ModelsModule
+    ModelsModule,
   ],
-  controllers: [HealthController]
+  controllers: [HealthController],
 })
-export class AppModule { }
+export class AppModule {}

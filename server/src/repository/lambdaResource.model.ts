@@ -21,16 +21,24 @@ export type LambdaResourceDocument = HydratedDocument<LambdaResource>;
   },
 })
 export class LambdaResource {
-
-  @ApiProperty({example: "1212csdaasd1212", description: "The unique resource id."})
+  @ApiProperty({
+    example: '1212csdaasd1212',
+    description: 'The unique resource id.',
+  })
   id?: string;
-  @ApiProperty({example: "training1", description: "The lambda container name"})
-  @Prop({unique: true})
+  @ApiProperty({
+    example: 'training1',
+    description: 'The lambda container name',
+  })
+  @Prop({ unique: true })
   containerName: string;
-  @ApiProperty({example: true, description: "Is the container currently running"})
+  @ApiProperty({
+    example: true,
+    description: 'Is the container currently running',
+  })
   @Prop()
   running: boolean;
-  
 }
 
-export const LambdaResourceSchema = SchemaFactory.createForClass(LambdaResource);
+export const LambdaResourceSchema =
+  SchemaFactory.createForClass(LambdaResource);

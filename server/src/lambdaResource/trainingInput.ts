@@ -1,6 +1,6 @@
 export interface TrainingInput {
-    trainingDataFileName: string;
-    modelStorageName: string;
-    inputVectorDims: [number, number];
-    modelStructure: string;
+  trainingDataFileName: string;
+  modelStorageName: string;
+  inputVectorDims: [number, number];
+  modelStructure: string;
 }

@@ -1,15 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { JobConfiguration } from "src/job/job.interface";
+import { Injectable } from '@nestjs/common';
+import { JobConfiguration } from 'src/job/job.interface';
 
 @Injectable()
 export class JobRegistryService {
-    private registry = {}
+  private registry = {};
 
-    registerJob(jobId: string, config: JobConfiguration): void {
-        this.registry[jobId] = config;
-    }
+  registerJob(jobId: string, config: JobConfiguration): void {
+    this.registry[jobId] = config;
+  }
 
-    getRunnableForJobId(jobId: string): JobConfiguration {
-        return this.registry[jobId];
-    }
+  getRunnableForJobId(jobId: string): JobConfiguration {
+    return this.registry[jobId];
+  }
 }

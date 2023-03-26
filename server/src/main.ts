@@ -1,12 +1,11 @@
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access';
-import * as Hbs from 'handlebars'
+import * as Hbs from 'handlebars';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'express-handlebars';
 import { join } from 'path';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -22,12 +21,12 @@ async function bootstrap() {
     helpers: {
       formatDate(date?: number) {
         if (date == null) {
-          return "null";
+          return 'null';
         }
-        return new Date(date).toISOString()
-      }
-    }
-  })
+        return new Date(date).toISOString();
+      },
+    },
+  });
 
   const options = new DocumentBuilder()
     .setTitle('Tracking Detector API')
@@ -35,13 +34,11 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('tracking-detector/api', app, document)
+  SwaggerModule.setup('tracking-detector/api', app, document);
 
   app.engine('hbs', hbsObj.engine);
-  app.setViewEngine('hbs')
+  app.setViewEngine('hbs');
 
   await app.listen(3000);
 }
 bootstrap();
-
-

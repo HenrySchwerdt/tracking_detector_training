@@ -21,21 +21,30 @@ export type JobMetaDocument = HydratedDocument<JobMeta>;
   },
 })
 export class JobMeta {
-  @ApiProperty({example: "ad12321asd1213", description: "The unique job id."})
+  @ApiProperty({ example: 'ad12321asd1213', description: 'The unique job id.' })
   id?: string;
-  @ApiProperty({example: "XXXJob", description: "The unique job name."})
+  @ApiProperty({ example: 'XXXJob', description: 'The unique job name.' })
   @Prop()
   jobName: string;
-  @ApiProperty({example: "This job ...", description: "The job description."})
+  @ApiProperty({ example: 'This job ...', description: 'The job description.' })
   @Prop()
   jobDescription: string;
-  @ApiProperty({example: 1231232, description: "Last job run date in miliseconds."})
+  @ApiProperty({
+    example: 1231232,
+    description: 'Last job run date in miliseconds.',
+  })
   @Prop()
   lastJobRun: number;
-  @ApiProperty({example: "* * * 1 *", description: "The cron pattern for the jobs when to start."})
+  @ApiProperty({
+    example: '* * * 1 *',
+    description: 'The cron pattern for the jobs when to start.',
+  })
   @Prop()
   cronPattern: string;
-  @ApiProperty({example: true, description: "Bool to determine weather the job is enabled."})
+  @ApiProperty({
+    example: true,
+    description: 'Bool to determine weather the job is enabled.',
+  })
   @Prop()
   enabled: boolean;
 }

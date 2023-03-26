@@ -10,6 +10,9 @@ import { RequestsService } from '../service/requests.service';
   ],
   controllers: [RequestsController],
   providers: [RequestsService],
-  exports: [RequestsService, MongooseModule.forFeature([{ name: Request.name, schema: RequestSchema }])],
+  exports: [
+    RequestsService,
+    MongooseModule.forFeature([{ name: Request.name, schema: RequestSchema }]),
+  ],
 })
 export class RequestsModule {}

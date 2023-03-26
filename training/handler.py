@@ -84,13 +84,19 @@ def upload_model_to_bucket():
             minioClient.fput_object(MODEL_BUCKET_NAME, "model/"+file, file_path)
 
 
-def handler(x, y):
-    extract_data()
-    training_data = pd.read_csv('training-data.csv', sep=',')
-    train_and_save_model(training_data)
-    upload_model_to_bucket()
-    delete_temporary_files()
-    return x + y
+def handler(trainingDataFileName, modelStorageName, inputVectorDims, modelStructure):
+    print(trainingDataFileName)
+    print(modelStorageName)
+    print(inputVectorDims)
+    print(modelStructure)
+    model = tf.keras.models.model_from_json(modelStructure)
+    print(model)
+    # extract_data()
+    # training_data = pd.read_csv('training-data.csv', sep=',')
+    # train_and_save_model(training_data)
+    # upload_model_to_bucket()
+    # delete_temporary_files()
+    return 8
 
 
 if __name__ == '__main__':

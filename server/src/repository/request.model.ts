@@ -62,9 +62,9 @@ export class Request {
   @ApiProperty({example: [{"Accept": "application/json"}], description: "The requestheaders provided by chrome"})
   @Prop()
   requestHeaders: any[];
-  @ApiProperty({example: [{"Accept": "application/json"}], description: "The request response provided by chrome"})
-  @Prop()
-  response: { documentId: string, documentLifecycle: string, frameId: string, frameType: string, fromCache: boolean, initiator: string, ip: string, method: string, parentFrameId: number, requestId: string, responseHeaders: { name: string, value: string }[] };
+  // @ApiProperty({example: [{"Accept": "application/json"}], description: "The request response provided by chrome"})
+  // @Prop()
+  // response: { documentId: string, documentLifecycle: string, frameId: string, frameType: string, fromCache: boolean, initiator: string, ip: string, method: string, parentFrameId: number, requestId: string, responseHeaders: { name: string, value: string }[] };
   @ApiProperty({example: true, description: "The url the requests wants to call"})
   @Prop()
   success: boolean;

@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^9.3.9",
     "@nestjs/schedule": "^2.2.0",
     "@nestjs/swagger": "^6.2.1",
+    "@tensorflow/tfjs": "^4.2.0",
     "bcrypt": "^5.1.0",
     "express-handlebars": "^7.0.2",
     "funker": "^0.0.4",

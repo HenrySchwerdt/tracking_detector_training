@@ -6,12 +6,25 @@ import { LambdaResource, LambdaResourceDocument } from "../repository/lambdaReso
 import { TrainingInput } from "../lambdaResource/trainingInput";
 
 
+const resourcesNames: string[] = process.env.RESOURCES.split(",")
+
 @Injectable()
 export class LambdaResourceService {
     constructor(
         @InjectModel(LambdaResource.name) private lambdaResourceModel: Model<LambdaResourceDocument>,
     ) { }
 
+    onModuleInit(): void {
+        this.lambdaResourceModel.deleteMany().exec()
+        resourcesNames.forEach(name => {
+            const createdRequest = new this.lambdaResourceModel({
+                containerName: name,
+                running: false,
+            });
+            createdRequest.save();
+        })
+    }
+    
 
     async callLambda(input: TrainingInput, callBack: (err: any, result: any) => void) {
         const resources = await this.lambdaResourceModel.find()

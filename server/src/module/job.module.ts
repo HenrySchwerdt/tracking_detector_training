@@ -16,10 +16,12 @@ import { JobRegistryService } from 'src/service/jobRegistry.service';
 import { ModelTraining204JobConfiguration } from 'src/job/modelTraining204Job.configuration';
 import { RequestDataExport204JobConfiguration } from 'src/job/requestDataExport204Job.configuration';
 import { CleanUpJobConfiguration } from 'src/job/cleanUpJob.configuration';
+import { LambdaResourceModule } from './lambdaResource.module';
 
 
 @Module({
   imports: [
+    LambdaResourceModule,
     RequestsModule,
     MinioModule,
     MongooseModule.forFeature([{ name: JobMeta.name, schema: JobMetaSchema }]),

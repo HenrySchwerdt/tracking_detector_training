@@ -62,8 +62,11 @@ export class ModelTraining204JobConfiguration extends JobConfiguration {
     .toString();
 
   private static trainingInput: TrainingInput = {
-    trainingDataFileName: 'training.csv.gz',
-    modelStorageName: 'tracking-detector/204-',
+    trainingDataFileName: 'training-data.csv.gz',
+    applicationName: 'tracking-detector',
+    modelStorageName: '204-model',
+    batchSize: 64,
+    epochs: 10,
     inputVectorDims: [204, 1],
     modelStructure: ModelTraining204JobConfiguration.kerasModelString,
   };

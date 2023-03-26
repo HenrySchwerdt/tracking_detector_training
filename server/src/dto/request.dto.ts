@@ -64,5 +64,5 @@ export class RequestDto {
     example: true,
     description: 'The label true: Tracking, false: non-Tracking',
   })
-  label: boolean;
+  labels: boolean | {isLabeled: boolean, blocklist: string, rule?: any[]}[];
 }

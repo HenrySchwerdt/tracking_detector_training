@@ -54,6 +54,7 @@ services:
     depends_on:
       - db
       - minio
+    restart: always
   
   # Model Training Lambda
   training:

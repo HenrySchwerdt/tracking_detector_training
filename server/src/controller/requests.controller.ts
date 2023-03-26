@@ -20,6 +20,7 @@ export class RequestsController {
   @ApiResponse({})
   async createRequest(@Body() requestDto: RequestDto) {
     await this.requestsService.create(requestDto);
+    return {success: true}
   }
 
   @Get()

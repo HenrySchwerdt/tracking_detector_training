@@ -8,10 +8,25 @@ import { Request, RequestDocument } from '../repository/request.model';
 export class RequestsService {
   constructor(
     @InjectModel(Request.name) private requestModel: Model<RequestDocument>,
-  ) {}
+  ) { }
 
   async create(createRequestDto: RequestDto): Promise<Request> {
-    const createdRequest = new this.requestModel(createRequestDto);
+    const createdRequest = new this.requestModel({
+      documentId: createRequestDto.documentId,
+      documentLifecycle: createRequestDto.documentLifecycle,
+      frameId: createRequestDto.frameId,
+      frameType: createRequestDto.frameType,
+      initiater: createRequestDto.initiater,
+      method: createRequestDto.method,
+      parentFrameId: createRequestDto.parentFrameId,
+      requestId: createRequestDto.requestId,
+      tabId: createRequestDto.tabId,
+      timeStamp: createRequestDto.timeStamp,
+      url: createRequestDto.url,
+      requestHeaders: createRequestDto.requestHeaders,
+      success: createRequestDto.success,
+      label: createRequestDto.labels[0].isLabeled
+    });
     return createdRequest.save();
   }
 

@@ -17,8 +17,8 @@ export class LambdaResourceService {
     private lambdaResourceModel: Model<LambdaResourceDocument>,
   ) {}
 
-  onModuleInit(): void {
-    this.lambdaResourceModel.deleteMany().exec();
+  async onModuleInit(): Promise<void> {
+    await this.lambdaResourceModel.deleteMany().exec();
     resourcesNames.forEach((name) => {
       const createdRequest = new this.lambdaResourceModel({
         containerName: name,
@@ -38,12 +38,22 @@ export class LambdaResourceService {
       { _id: freeResource.id },
       { running: true },
     );
-    call(freeResource.containerName, input, (err, res) => {
+    try {
+      call(freeResource.containerName, input, (err, res) => {
+        console.log(err, res, "Finished Lambda")
+        this.lambdaResourceModel.updateOne(
+          { _id: freeResource.id },
+          { running: false },
+        );
+        callBack(err, res);
+      });
+    } catch(e) {
       this.lambdaResourceModel.updateOne(
         { _id: freeResource.id },
         { running: false },
       );
-      callBack(err, res);
-    });
+      callBack(e, null)
+    }
+    
   }
 }

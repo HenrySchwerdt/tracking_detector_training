@@ -25,7 +25,7 @@ export class ModelTrainingJob extends Job {
           jobEventPublisher.error('Error occured ');
           resolve(false);
         }
-        jobEventPublisher.info('Result: ', JSON.stringify(res));
+        jobEventPublisher.info(res);
         resolve(true);
       });
     });

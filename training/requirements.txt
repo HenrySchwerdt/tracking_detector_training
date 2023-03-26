@@ -5,3 +5,5 @@ numpy
 tensorflowjs
 sklearn
 tensorflow
+tqdm
+polars

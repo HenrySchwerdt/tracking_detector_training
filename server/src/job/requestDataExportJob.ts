@@ -10,11 +10,12 @@ import { JobEventPublisher } from './jobEventPublisher.service';
 import { createGzip } from 'zlib';
 import { MinioService } from 'src/service/minio.service';
 import { RequestsService } from 'src/service/requests.service';
+import { FeatureExtractor } from 'src/extractor/featureExtractor';
 
 export class RequestDataExportJob extends Job {
   constructor(
     jobDefinition: JobDefinition,
-    private featureExtractor: (request: Request) => string,
+    private featureExtractor: FeatureExtractor,
     private readonly requestsService: RequestsService,
     private readonly minioService: MinioService,
   ) {
@@ -51,7 +52,7 @@ export class RequestDataExportJob extends Job {
       if (progress % 1000 == 0) {
         jobEventPublisher.info('Progress: ' + progress, '/' + numberOfRequests);
       }
-      appendFileSync(unZippedFileName, this.featureExtractor(doc));
+      appendFileSync(unZippedFileName, this.featureExtractor.extract(doc)+"\n");
       progress++;
     }
 
